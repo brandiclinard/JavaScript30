@@ -3,11 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
-  <link rel="stylesheet" href="style.css">
+<!--  <link rel="stylesheet" href="style.css">-->
+  <style>
+
+    html {
+      font-size: 10px;
+      background: url("kid-playing-drums.jpg") center;
+      background-size: cover;
+    }
+
+    body,html {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
+    .keys {
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .key {
+      border: .4rem solid black;
+      border-radius: .5rem;
+      margin: 1rem;
+      font-size: 1.5rem;
+      padding: 1rem .5rem;
+      transition: all .07s ease;
+      width: 10rem;
+      text-align: center;
+      color: white;
+      background: rgba(0,0,0,0.4);
+      text-shadow: 0 0 .5rem black;
+    }
+
+    .playing {
+      transform: scale(1.1);
+      border-color: #7a0b09;
+      box-shadow: 0 0 1rem #7a0b09;
+    }
+
+    kbd {
+      display: block;
+      font-size: 4rem;
+    }
+
+    .sound {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: .1rem;
+      color: #ffc600;
+    }
+
+  </style>
 </head>
 <body>
-
-
   <div class="keys">
     <div data-key="65" class="key">
       <kbd>A</kbd>
@@ -58,19 +111,30 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-  window.addEventListener('keydown', function(e){
-  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
-  if (!audio) return; // stop fn from running
-    audio.currentTime = 0; //rewind to the start
-    audio.play();
-    key.classList.add('playing');
 
-  });
+    function playSound(e){
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        if (!audio) return; // stop fn from running
+        audio.currentTime = 0; //rewind to the start
+        audio.play();
+        key.classList.add('playing');
+    }
+
+  function removeTransition(e) {
+    if(e.propertyName !== 'transform') return; //skip it if it's not a transform
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  window.addEventListener('keydown', playSound);
+
+
 </script>
 
 
 </body>
 </html>
 
-<!-- PAUSED VIDEO AT 10:35; KEYS LIGHT UP BUT DO NOT RETURN. MAKE SOUND WITHOUT GAPS.-->
+<!-- COMPLETE WITH PERSONAL ALTERATIONS. CSS IS NOW INLINE WITH HTML TO ALLOW PUSH. -->
